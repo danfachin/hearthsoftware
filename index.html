@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#f6f3ed" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#11110f" media="(prefers-color-scheme: dark)">
+    <meta
+      name="description"
+      content="Hearth Software builds security-first infrastructure for AI agents: connector surfaces, governed permissioning, and audited data layers."
+    >
+    <meta property="og:title" content="Hearth Software — Security-first agentic infrastructure">
+    <meta
+      property="og:description"
+      content="Connector surfaces, governed permissioning, and audited data layers for safe automation."
+    >
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://hearthsoftware.ca/">
+    <meta name="twitter:card" content="summary">
+    <link rel="canonical" href="https://hearthsoftware.ca/">
+    <title>Hearth Software — Security-first agentic infrastructure</title>
+
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f3ed;
+        --surface: #fbf9f5;
+        --surface-strong: #1b1a17;
+        --text: #1b1a17;
+        --muted: #68645d;
+        --muted-on-dark: #c9c3b9;
+        --line: #dcd6cc;
+        --line-dark: rgba(255, 255, 255, 0.16);
+        --accent: #c5411e;
+        --accent-hover: #a93315;
+        --accent-on-strong: #ff7b53;
+        --on-accent: #fffaf5;
+        --on-dark: #fffaf3;
+        --shadow: 0 18px 60px rgba(35, 26, 18, 0.08);
+        --radius-sm: 0.75rem;
+        --radius-md: 1.25rem;
+        --radius-lg: 1.75rem;
+        --container: 72.5rem;
+        --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji";
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #11110f;
+          --surface: #181815;
+          --surface-strong: #f1ede5;
+          --text: #f1ede5;
+          --muted: #aaa49a;
+          --muted-on-dark: #5e5a53;
+          --line: #302f2a;
+          --line-dark: rgba(17, 17, 15, 0.14);
+          --accent: #f06a42;
+          --accent-hover: #ff7b53;
+          --accent-on-strong: #b93616;
+          --on-accent: #17110e;
+          --on-dark: #171713;
+          --shadow: 0 22px 70px rgba(0, 0, 0, 0.28);
+        }
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-padding-top: 5rem;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        html {
+          scroll-behavior: smooth;
+        }
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
+
+      img,
+      svg {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-thickness: 0.08em;
+        text-underline-offset: 0.2em;
+      }
+
+      a:hover {
+        color: var(--accent);
+      }
+
+      :focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 4px;
+        border-radius: 0.2rem;
+      }
+
+      ::selection {
+        background: var(--accent);
+        color: var(--on-accent);
+      }
+
+      .container {
+        width: min(calc(100% - 2.5rem), var(--container));
+        margin-inline: auto;
+      }
+
+      .skip-link {
+        position: fixed;
+        z-index: 100;
+        top: 0.75rem;
+        left: 0.75rem;
+        padding: 0.65rem 0.9rem;
+        transform: translateY(-180%);
+        border-radius: 0.5rem;
+        background: var(--surface-strong);
+        color: var(--on-dark);
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .skip-link:focus {
+        transform: translateY(0);
+      }
+
+      .site-header {
+        position: sticky;
+        z-index: 20;
+        top: 0;
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+      }
+
+      .header-inner {
+        min-height: 4.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .wordmark {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 0.6rem;
+        color: var(--text);
+        font-size: 0.86rem;
+        font-weight: 760;
+        letter-spacing: -0.01em;
+        text-decoration: none;
+      }
+
+      .wordmark:hover {
+        color: var(--text);
+      }
+
+      .wordmark-mark {
+        width: 1.45rem;
+        color: var(--accent);
+      }
+
+      .site-nav {
+        display: flex;
+        align-items: center;
+        gap: clamp(0.85rem, 4vw, 2rem);
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .site-nav a {
+        text-decoration: none;
+      }
+
+      main {
+        overflow: hidden;
+      }
+
+      .hero {
+        position: relative;
+        display: grid;
+        min-height: min(49rem, calc(100svh - 4.75rem));
+        align-items: center;
+        padding-block: clamp(5.5rem, 12vw, 9.5rem);
+      }
+
+      .hero::after {
+        position: absolute;
+        z-index: -1;
+        right: max(-11rem, -12vw);
+        bottom: 6%;
+        width: 19rem;
+        aspect-ratio: 1;
+        border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+        border-radius: 50%;
+        content: "";
+      }
+
+      .eyebrow {
+        margin: 0 0 1rem;
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.08;
+        text-wrap: balance;
+      }
+
+      h1 {
+        max-width: 66rem;
+        margin-bottom: 1.75rem;
+        font-size: clamp(2.75rem, 8.2vw, 6.35rem);
+        font-weight: 760;
+        letter-spacing: -0.062em;
+      }
+
+      .hero-copy {
+        max-width: 50rem;
+        margin-bottom: 2.25rem;
+        color: var(--muted);
+        font-size: clamp(1.08rem, 2vw, 1.32rem);
+        line-height: 1.65;
+        text-wrap: pretty;
+      }
+
+      .button {
+        display: inline-flex;
+        min-height: 3.25rem;
+        align-items: center;
+        justify-content: center;
+        gap: 0.65rem;
+        padding: 0.8rem 1.2rem;
+        border: 1px solid var(--accent);
+        border-radius: 999px;
+        background: var(--accent);
+        color: var(--on-accent);
+        font-size: 0.9rem;
+        font-weight: 800;
+        line-height: 1;
+        text-decoration: none;
+        transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+      }
+
+      .button:hover {
+        border-color: var(--accent-hover);
+        background: var(--accent-hover);
+        color: var(--on-accent);
+        transform: translateY(-2px);
+      }
+
+      .button-arrow {
+        font-size: 1.05em;
+        transition: transform 160ms ease;
+      }
+
+      .button:hover .button-arrow {
+        transform: translateX(0.18rem);
+      }
+
+      .section {
+        padding-block: clamp(5.5rem, 10vw, 9rem);
+        border-top: 1px solid var(--line);
+      }
+
+      .section-intro {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: clamp(2.75rem, 6vw, 4.5rem);
+        scroll-margin-top: 7rem;
+      }
+
+      .section-title {
+        max-width: 42rem;
+        margin-bottom: 0;
+        font-size: clamp(2.25rem, 5vw, 4.25rem);
+        font-weight: 730;
+        letter-spacing: -0.048em;
+      }
+
+      .section-summary {
+        max-width: 36rem;
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 1.05rem;
+      }
+
+      .cards {
+        display: grid;
+        gap: 1rem;
+      }
+
+      .card {
+        min-height: 19rem;
+        padding: clamp(1.5rem, 4vw, 2.15rem);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-md);
+        background: var(--surface);
+        box-shadow: 0 1px 0 color-mix(in srgb, var(--text) 3%, transparent);
+      }
+
+      .card-number {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        margin-bottom: 5rem;
+        color: var(--accent);
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+      }
+
+      .card-number::after {
+        width: 2.25rem;
+        height: 1px;
+        background: currentColor;
+        content: "";
+      }
+
+      .card h3 {
+        margin-bottom: 0.8rem;
+        font-size: 1.35rem;
+        letter-spacing: -0.025em;
+      }
+
+      .card p {
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 0.97rem;
+        line-height: 1.7;
+      }
+
+      .founder-grid {
+        display: grid;
+        gap: clamp(2.5rem, 8vw, 7rem);
+        align-items: center;
+      }
+
+      .portrait-frame {
+        position: relative;
+        overflow: hidden;
+        width: min(100%, 29rem);
+        aspect-ratio: 4 / 5;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        background:
+          linear-gradient(145deg, color-mix(in srgb, var(--accent) 9%, var(--surface)), var(--surface));
+        box-shadow: var(--shadow);
+      }
+
+      .portrait-frame::before {
+        position: absolute;
+        inset: auto 1.5rem 1rem auto;
+        color: color-mix(in srgb, var(--accent) 24%, transparent);
+        content: "DF";
+        font-size: clamp(4rem, 20vw, 8rem);
+        font-weight: 800;
+        letter-spacing: -0.09em;
+        line-height: 1;
+      }
+
+      .portrait-frame img {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: transparent;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .founder-copy {
+        max-width: 39rem;
+      }
+
+      .founder-copy .section-title {
+        margin-bottom: 1.4rem;
+      }
+
+      .founder-copy > p:not(.eyebrow) {
+        margin-bottom: 1rem;
+        color: var(--muted);
+        font-size: clamp(1.02rem, 1.8vw, 1.16rem);
+        line-height: 1.75;
+      }
+
+      .text-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.25rem;
+        margin-top: 2rem;
+        font-size: 0.82rem;
+        font-weight: 760;
+      }
+
+      .text-links a {
+        color: var(--accent);
+      }
+
+      .cta-section {
+        padding-block: clamp(2rem, 5vw, 4.5rem) clamp(5rem, 9vw, 8rem);
+      }
+
+      .cta-panel {
+        display: grid;
+        gap: 2rem;
+        align-items: end;
+        padding: clamp(2rem, 7vw, 5rem);
+        border-radius: var(--radius-lg);
+        background: var(--surface-strong);
+        color: var(--on-dark);
+      }
+
+      .cta-panel .eyebrow {
+        margin-bottom: 0.8rem;
+        color: var(--accent-on-strong);
+      }
+
+      .cta-panel h2 {
+        max-width: 45rem;
+        margin-bottom: 0;
+        font-size: clamp(2.15rem, 5.5vw, 4.6rem);
+        font-weight: 720;
+        letter-spacing: -0.05em;
+      }
+
+      .cta-panel .button {
+        width: fit-content;
+        min-height: 3.65rem;
+        padding-inline: 1.45rem;
+        font-size: 0.95rem;
+      }
+
+      .site-footer {
+        border-top: 1px solid var(--line);
+      }
+
+      .footer-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 1.1rem;
+        justify-content: space-between;
+        padding-block: 1.75rem 2.5rem;
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+
+      .footer-inner p {
+        margin-bottom: 0;
+      }
+
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem 1.1rem;
+      }
+
+      .footer-links a {
+        color: var(--muted);
+      }
+
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+
+      @media (min-width: 42rem) {
+        .container {
+          width: min(calc(100% - 4rem), var(--container));
+        }
+
+        .section-intro {
+          grid-template-columns: minmax(0, 1.3fr) minmax(17rem, 0.7fr);
+          align-items: end;
+        }
+
+        .cards {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .card {
+          display: flex;
+          min-height: 24rem;
+          flex-direction: column;
+        }
+
+        .card-number {
+          margin-bottom: auto;
+        }
+
+        .founder-grid {
+          grid-template-columns: minmax(17rem, 0.78fr) minmax(0, 1.22fr);
+        }
+
+        .cta-panel {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+
+        .footer-inner {
+          flex-direction: row;
+          align-items: center;
+        }
+      }
+
+      @media (max-width: 24rem) {
+        .container {
+          width: min(calc(100% - 2rem), var(--container));
+        }
+
+        .header-inner {
+          min-height: 4.25rem;
+        }
+
+        .wordmark {
+          gap: 0.45rem;
+          font-size: 0.76rem;
+        }
+
+        .wordmark-mark {
+          width: 1.2rem;
+        }
+
+        .site-nav {
+          gap: 0.7rem;
+          font-size: 0.7rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="wordmark" href="#top" aria-label="Hearth Software, home">
+          <svg class="wordmark-mark" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M3 14 14 3l11 11" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 14v9h12v-9" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 20c-2.8-1.9-2.9-4.1.1-7 2.7 2.4 2.9 4.9-.1 7Z" fill="currentColor"/>
+          </svg>
+          <span>Hearth Software</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Primary navigation">
+          <a href="#work">Work</a>
+          <a href="#approach">Approach</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="container">
+          <p class="eyebrow">Ottawa · Canada</p>
+          <h1 id="hero-title">Agentic infrastructure, built security-first.</h1>
+          <p class="hero-copy">
+            Hearth Software builds the connective tissue for AI agents — connector surfaces,
+            identity and permissioning, and audited data layers — designed so automation is safe
+            by default.
+          </p>
+          <a class="button" href="mailto:danfachin@gmail.com">
+            Get in touch <span class="button-arrow" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" id="work" aria-labelledby="work-title">
+        <div class="container">
+          <div class="section-intro" id="approach">
+            <div>
+              <p class="eyebrow">Approach</p>
+              <h2 class="section-title" id="work-title">The systems behind trustworthy automation.</h2>
+            </div>
+            <p class="section-summary">
+              Practical infrastructure for agents that need to connect, act, and leave a clear
+              record behind.
+            </p>
+          </div>
+
+          <div class="cards">
+            <article class="card">
+              <span class="card-number">01</span>
+              <h3>Connector surfaces</h3>
+              <p>
+                A composable MCP-based tool and connector layer that meets systems where they are
+                — across REST, GraphQL, and webhooks.
+              </p>
+            </article>
+
+            <article class="card">
+              <span class="card-number">02</span>
+              <h3>Auth &amp; permissioning</h3>
+              <p>
+                Governed doors with approval-ticket validation by SQL hash, session, and TTL, so
+                no automated write happens without a scoped, time-boxed grant.
+              </p>
+            </article>
+
+            <article class="card">
+              <span class="card-number">03</span>
+              <h3>Audited data</h3>
+              <p>
+                A git-for-data audit layer where every automated write is inspectable and
+                rollbackable — built with zero-data-loss discipline.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="founder-title">
+        <div class="container founder-grid">
+          <div class="portrait-frame">
+            <img src="headshot.jpg" alt="Dan Fachin" width="960" height="1200">
+          </div>
+
+          <div class="founder-copy">
+            <p class="eyebrow">Founder</p>
+            <h2 class="section-title" id="founder-title">Dan Fachin — Founder</h2>
+            <p>
+              Dan is a product manager who builds, with seven years shipping marketplace and
+              integrations products at Getaround, including work with the Uber API and Zendesk.
+              For the past two years, he has designed and operated production agentic-AI
+              infrastructure end to end. His default is security-first: make the safe path the
+              natural path.
+            </p>
+
+            <div class="text-links" aria-label="Dan Fachin links">
+              <a href="https://www.notion.so/7dd773ecf10c82cf9d3881fba92415d1">Portfolio</a>
+              <a href="https://www.linkedin.com/in/dan-fachin-3459a093/">LinkedIn</a>
+              <a href="https://github.com/danfachin">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta-section" id="contact" aria-labelledby="contact-title">
+        <div class="container">
+          <div class="cta-panel">
+            <div>
+              <p class="eyebrow">Start a conversation</p>
+              <h2 id="contact-title">Building where agents meet real systems?</h2>
+            </div>
+            <a class="button" href="mailto:danfachin@gmail.com">
+              Email Dan <span class="button-arrow" aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© 2026 Hearth Software · Ottawa, Ontario, Canada</p>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="https://www.notion.so/7dd773ecf10c82cf9d3881fba92415d1">Portfolio</a>
+          <a href="https://www.linkedin.com/in/dan-fachin-3459a093/">LinkedIn</a>
+          <a href="https://github.com/danfachin">GitHub</a>
+        </nav>
+      </div>
+    </footer>
+  </body>
+</html>
